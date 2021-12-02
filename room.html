@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.container {
+  border: 2px solid blue;
+   background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px 0;
+} 
+
+.darker {
+  border: 3PX solid blue;
+  border-color: blue;
+  background-color: white;
+}
+/* ////////////////////////// */
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+
+.deck {
+  position: relative;
+  width: 7em;
+  height: 10em;
+  top:-120px ;
+  left: -170px;
+  margin: -6.5em 0 0 -5em;
+  /* -webkit-backface-visibility: hidden; */
+  font-family: "Ubuntu", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  text-align: center;
+}
+
+.deck__item {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border-radius: 0.3em;
+  border: 0.1em solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.3), inset 0 6em 6em rgba(255, 255, 255, 0.1);
+  transform-origin: 90% 92%;
+  transition: 0.3s;
+}
+.deck__item:hover ~ .deck__item {
+  transform: rotate(120deg);
+}
+
+.deck__item:last-of-type:after {
+  content: "";
+  position: absolute;
+  left: 90%;
+  top: 92%;
+  border-radius: 50%;
+  width: 1.2em;
+  height: 1.2em;
+  background: white;
+  margin: -0.6em 0 0 -0.6em;
+  box-shadow: inset 0 1px 1px white, inset 0 -0.3em 0.2em #dddcdb, 0 0 0.6em rgba(0, 0, 0, 0.2);
+}
+
+.deck__item:last-of-type:before {
+  content: "";
+  position: absolute;
+  right: 0.4em;
+  bottom: 0.9em;
+  width: 1.1em;
+  height: 0.15em;
+  background: silver;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.deck__link {
+  text-decoration: none;
+  display: block;
+  color: white;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.deck__icon {
+  font-family: "FontAwesome", sans-serif;
+  font-size: 4em;
+  color: black;
+  color: rgba(0, 0, 0, 0.6);
+  display: block;
+  margin: 0.5em auto;
+}
+
+.deck__item--facebook {
+  background: #3b5998;
+  transform: rotate(-20deg);
+}
+
+.deck__item--github {
+  background: #4183c4;
+  transform: rotate(-10deg);
+}
+
+.deck__item--twitter {
+  background: #00a0d1;
+  transform: rotate(0deg);
+}
+
+.deck__item--linkedin {
+  background: #0e76a8;
+  transform: rotate(10deg);
+}
+
+.deck__item--pinterest {
+  background: #910101;
+  transform: rotate(20deg);
+}
+
+.deck__item--googleplus {
+  background: #db4a39;
+  transform: rotate(30deg);
+}
+@keyframes loading {
+  0% {
+    cy: 10;
+  }
+  25% {
+    cy: 3;
+  }
+  50% {
+    cy: 10;
+  }
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  /* background-color: #f4f7ff; */
+}
+
+canvas {
+  height: 100vh;
+  pointer-events: none;
+  position:-ms-page;
+ 
+ 
+  z-index: 1;
+}
+
+button {
+  background: none;
+  border: none;
+  color: #f4f7ff;
+  cursor: pointer;
+  font-family: "Roboto", Arial;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  left: 58%;
+  outline: none;
+  overflow: hidden;
+  padding: 0 10px;
+  position: relative;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 190px;
+  z-index: 1;
+}
+button::before {
+  background: #1f2335;
+  border-radius: 50px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) inset;
+  content: "";
+  display: block;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+  transition: width 0.2s cubic-bezier(0.39, 1.86, 0.64, 1) 0.3s;
+  width: 100%;
+}
+
+button.ready .submitMessage svg {
+  opacity: 1;
+  top: 1px;
+  transition: top 0.4s ease 600ms, opacity 0.3s linear 600ms;
+}
+button.ready .submitMessage .button-text span {
+  top: 0;
+  opacity: 1;
+  transition: all 0.2s ease calc(var(--dr) + 600ms);
+}
+
+button.loading::before {
+  transition: width 0.3s ease;
+  width: 80%;
+}
+button.loading .loadingMessage {
+  opacity: 1;
+}
+button.loading .loadingCircle {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: loading;
+  cy: 10;
+}
+
+button.complete .submitMessage svg {
+  top: -30px;
+  transition: none;
+}
+button.complete .submitMessage .button-text span {
+  top: -8px;
+  transition: none;
+}
+button.complete .loadingMessage {
+  top: 80px;
+}
+button.complete .successMessage .button-text span {
+  left: 0;
+  opacity: 1;
+  transition: all 0.2s ease calc(var(--d) + 1000ms);
+}
+button.complete .successMessage svg {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.3s ease-in-out 1.4s;
+}
+
+.button-text span {
+  opacity: 0;
+  position: relative;
+}
+
+.message {
+  left: 45%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.message svg {
+  display: inline-block;
+  fill: none;
+  margin-right: 5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.submitMessage .button-text span {
+  top: 8px;
+  transition: all 0.2s ease var(--d);
+}
+.submitMessage svg {
+  color: #5c86ff;
+  margin-left: -1px;
+  opacity: 0;
+  position: relative;
+  top: 150px;
+  transition: top 0.4s ease, opacity 0.3s linear;
+  width: 14px;
+}
+
+.loadingMessage {
+  opacity: 0;
+  transition: opacity 0.3s linear 0.3s,
+    top 0.4s cubic-bezier(0.22, 0, 0.41, -0.57);
+}
+.loadingMessage svg {
+  fill: #5c86ff;
+  margin: 0;
+  width: 22px;
+}
+
+.successMessage .button-text span {
+  left: 5px;
+  transition: all 0.2s ease var(--dr);
+}
+.successMessage svg {
+  color: #5cffa1;
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  transition: stroke-dashoffset 0.3s ease-in-out;
+  width: 14px;
+}
+
+.loadingCircle:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.loadingCircle:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+html {
+    height: 100%;
+  }
+  body { 
+    background-color: rgb(91, 195, 255);
+    height: 100%;
+    position: relative;
+  }
+  svg.flakes {
+    width: 10px;
+    height: 10px;
+    fill: #fff;
+  }
+  .snowing {
+    position: fixed;
+    top: -10%;
+    z-index: 9999;
+    animation-name: snowing-falling, snowing-waves;
+    animation-duration: 10s, 3s;
+    animation-timing-function: ease-in, ease-in-out;
+    animation-iteration-count: infinite, infinite;
+    animation-play-state: running, running;
+  }
+  @keyframes snowing-falling {
+    0% {
+      top: -5%;
+    }
+    100% {
+      top: 100%;
+    }
+  }
+  @keyframes snowing-waves {
+    0% {
+      transform: translateX(0px);
+    }
+    30% {
+      transform: translateX(60px);
+    }
+    60% {
+      transform: translateX(40px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+  .snowing:nth-of-type(0) {
+    left: 5%;
+    animation-delay: 5s, 0s;
+  }
+  .snowing:nth-of-type(1) {
+    left: 10%;
+    animation-delay: 3s, 3s;
+  }
+  .snowing:nth-of-type(2) {
+    left: 17%;
+    animation-delay: 1s, 0.5s;
+  }
+  .snowing:nth-of-type(3) {
+    left: 30%;
+    animation-delay: 6s, 1.6s;
+  }
+  .snowing:nth-of-type(4) {
+    left: 40%;
+    animation-delay: 2s, 2s;
+  }
+  .snowing:nth-of-type(5) {
+    left: 50%;
+    animation-delay: 7s, 3s;
+  }
+  .snowing:nth-of-type(6) {
+    left: 60%;
+    animation-delay: 4.5s, 2s;
+  }
+  .snowing:nth-of-type(7) {
+    left: 70%;
+    animation-delay: 3.5s, 1s;
+  }
+  .snowing:nth-of-type(8) {
+    left: 80%;
+    animation-delay: 2s, 1.4s;
+  }
+  .snowing:nth-of-type(9) {
+    left: 90%;
+    animation-delay: 4s, 2s;
+  }
+
+/* 
+..............1
+1
+
+*/
+
+
+
+
+
+
+</style>
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+</head>
+<body>
+
+<h2 style="text-align: center;">>>>>{{username}}<<<<</h2>
+<hr>
+
+<div id="display">
+
+
+
+
+
+
+
+</div>
+
+<script>
+$(document).ready(function(){
+
+setInterval(function(){
+    $.ajax({
+        type: 'GET',
+        url : "/getMessages/{{room}}/",
+        success: function(response){
+            console.log(response);
+            $("#display").empty();
+            for (var key in response.messages)
+            {
+                var temp="<div class='container darker'><b>"+response.messages[key].user+"</b><p>"+response.messages[key].value+"</p><span class='time-left'>"+response.messages[key].date+"</span></div>";
+                $("#display").append(temp);
+            }
+        },
+        error: function(response){
+            alert('An error occured')
+        }
+    });
+},1000);
+})
+</script>
+
+
+    </style>
+
+    <form id="post-form">
+        {% csrf_token %}
+        <input type="hidden" name="username" id="username" value="{{username}}"/><br>
+        <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
+        <div style="position: relative;  width: auto;
+        /* background-color: #FFF; */
+        color: blue;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;">
+        <input style="height: 40px; width: 700px; border: 3px solid blue;" type="text" name="message" id="message" width="100px" />
+        <input   style=
+        "width: auto;
+        height: 43px;
+        position: relative;
+        left: 720px;
+        top: -53px;
+        background-color:blue ;
+        color:white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;" 
+        type="submit" value="ok">
+      </div>
+    </form>
+
+<div style="position: relative; height:  20px; width: 200px; top: 70%;left: -35%;border: 3px solid rgb(233, 233, 240); text-align: center; ">  <button id="button" class="ready" onclick="clickButton();">
+
+  <div class="message submitMessage">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 12.2">
+      <!-- <polyline stroke="currentColor" points="2,7.1 6.5,11.1 11,7.1 " />
+      <line stroke="currentColor" x1="6.5" y1="1.2" x2="6.5" y2="10.3" /> -->
+    </svg> <span class="button-text">Subxanov Soxibjon</span>
+  </div>
+
+  <div class="message loadingMessage">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 17">
+      <circle class="loadingCircle" cx="2.2" cy="10" r="1.6" />
+      <circle class="loadingCircle" cx="9.5" cy="10" r="1.6" />
+      <circle class="loadingCircle" cx="16.8" cy="10" r="1.6" />
+    </svg>
+  </div>
+
+  <div class="message successMessage">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 11">
+      <polyline stroke="currentColor" points="1.4,5.8 5.1,9.5 11.6,2.1 " />
+    </svg> <span class="button-text">Accounts</span>
+  </div>
+</button>
+
+<canvas id="canvas"></canvas>
+
+</div>
+
+
+
+<!-- ........................ -->
+<div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+        <div class="snowing">
+          <svg
+            class="flakes"
+            enable-background="new 0 0 497.881 497.881"
+            height="512"
+            viewbox="0 0 497.881 497.881"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m497.881 217.823h-80.468l40.234-40.234-44.002-44.002-84.236 84.236h-49.351v-49.351l84.236-84.236-44.002-44.002-40.234 40.234v-80.468h-62.235v80.468l-40.234-40.234-44.002 44.002 84.236 84.236v49.351h-49.351l-84.236-84.236-44.002 44.002 40.234 40.234h-80.468v62.235h80.468l-40.234 40.234 44.002 44.002 84.236-84.236h49.351v49.351l-84.236 84.236 44.002 44.002 40.234-40.234v80.468h62.235v-80.468l40.234 40.234 44.002-44.002-84.236-84.236v-49.351h49.351l84.236 84.236 44.002-44.002-40.234-40.234h80.468z"
+            />
+          </svg>
+        </div>
+      </div>
+
+
+
+<!-- ////////////////////////////// -->
+
+
+<ul class="deck">
+  <li class="deck__item deck__item--facebook">
+    <a class="deck__link" href="#">
+      <span class="deck__icon fontawesome-facebook"></span>
+      <span class="deck__label"><a href="https://t.me/@Soxibjon_Subxanov">Facebook</a></span>
+    </a>
+  </li>
+  <li class="deck__item deck__item--github">
+    <a class="deck__link" href="#">
+      <span class="deck__icon fontawesome-github"></span>
+      <span class="deck__label"><a href="https://t.me/@Soxibjon_Subxanov">Google+</a></span>
+    </a>
+  </li>
+  <li class="deck__item deck__item--twitter">
+    <a class="deck__link" href="#">
+      <span class="deck__icon fontawesome-twitter"></span>
+      <span class="deck__label"><a href="https://t.me/@Soxibjon_Subxanov">TikTok</a></span>
+    </a>
+  </li>
+  <li class="deck__item deck__item--linkedin">
+    <a class="deck__link" href="#">
+      <span class="deck__icon fontawesome-linkedin"></span>
+      <span class="deck__label"><a href="https://t.me/@Soxibjon_Subxanov">Yandex</a></span>
+    </a>
+  </li>
+  <li class="deck__item deck__item--pinterest">
+    <a class="deck__link" href="#">
+      <span class="deck__icon fontawesome-pinterest"></span>
+      <span class="deck__label"><a href="#https://t.me/@Soxibjon_Subxanov">Instagram</a></span>
+    </a>
+  </li>
+  <li class="deck__item deck__item--googleplus">
+    <a class="deck__link" href="#">
+      <span class="deck__icon fontawesome-google-plus"></span>
+      <span class="deck__label"><a href="https://t.me/@Soxibjon_Subxanov">Telegram</a></span>
+    </a>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</body>
+
+<script type="text/javascript">
+  $(document).on('submit','#post-form',function(e){
+    e.preventDefault();
+
+    $.ajax({
+      type:'POST',
+      url:'/send',
+      data:{
+          username:$('#username').val(),
+          room_id:$('#room_id').val(),
+          message:$('#message').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+         //alert(data)
+      }
+    });
+    document.getElementById('message').value = ''
+  });
+
+  // 
+  const button = document.getElementById("button");
+var disabled = false;
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let cx = ctx.canvas.width / 2;
+let cy = ctx.canvas.height / 2;
+
+// add Confetti/Sequince objects to arrays to draw them
+let confetti = [];
+let sequins = [];
+
+// ammount to add on each button press
+const confettiCount = 20;
+const sequinCount = 10;
+
+// "physics" variables
+const gravityConfetti = 0.3;
+const gravitySequins = 0.55;
+const dragConfetti = 0.075;
+const dragSequins = 0.02;
+const terminalVelocity = 3;
+
+// colors, back side is darker for confetti flipping
+const colors = [
+  { front: "#7b5cff", back: "#6245e0" }, // Purple
+  { front: "#b3c7ff", back: "#8fa5e5" }, // Light Blue
+  { front: "#5c86ff", back: "#345dd1" } // Darker Blue
+];
+
+// helper function to pick a random number within a range
+randomRange = (min, max) => Math.random() * (max - min) + min;
+
+// helper function to get initial velocities for confetti
+// this weighted spread helps the confetti look more realistic
+initConfettoVelocity = (xRange, yRange) => {
+  const x = randomRange(xRange[0], xRange[1]);
+  const range = yRange[1] - yRange[0] + 1;
+  let y =
+    yRange[1] - Math.abs(randomRange(0, range) + randomRange(0, range) - range);
+  if (y >= yRange[1] - 1) {
+    // Occasional confetto goes higher than the max
+    y += Math.random() < 0.25 ? randomRange(1, 3) : 0;
+  }
+  return { x: x, y: -y };
+};
+
+// Confetto Class
+function Confetto() {
+  this.randomModifier = randomRange(0, 99);
+  this.color = colors[Math.floor(randomRange(0, colors.length))];
+  this.dimensions = {
+    x: randomRange(5, 9),
+    y: randomRange(8, 15)
+  };
+  this.position = {
+    x: randomRange(
+      canvas.width / 2 - button.offsetWidth / 4,
+      canvas.width / 2 + button.offsetWidth / 4
+    ),
+    y: randomRange(
+      canvas.height / 2 + button.offsetHeight / 2 + 8,
+      canvas.height / 2 + 1.5 * button.offsetHeight - 8
+    )
+  };
+  this.rotation = randomRange(0, 2 * Math.PI);
+  this.scale = {
+    x: 1,
+    y: 1
+  };
+  this.velocity = initConfettoVelocity([-9, 9], [6, 11]);
+}
+Confetto.prototype.update = function () {
+  // apply forces to velocity
+  this.velocity.x -= this.velocity.x * dragConfetti;
+  this.velocity.y = Math.min(
+    this.velocity.y + gravityConfetti,
+    terminalVelocity
+  );
+  this.velocity.x += Math.random() > 0.5 ? Math.random() : -Math.random();
+
+  // set position
+  this.position.x += this.velocity.x;
+  this.position.y += this.velocity.y;
+
+  // spin confetto by scaling y and set the color, .09 just slows cosine frequency
+  this.scale.y = Math.cos((this.position.y + this.randomModifier) * 0.09);
+};
+
+// Sequin Class
+function Sequin() {
+  (this.color = colors[Math.floor(randomRange(0, colors.length))].back),
+    (this.radius = randomRange(1, 2)),
+    (this.position = {
+      x: randomRange(
+        canvas.width / 2 - button.offsetWidth / 3,
+        canvas.width / 2 + button.offsetWidth / 3
+      ),
+      y: randomRange(
+        canvas.height / 2 + button.offsetHeight / 2 + 8,
+        canvas.height / 2 + 1.5 * button.offsetHeight - 8
+      )
+    }),
+    (this.velocity = {
+      x: randomRange(-6, 6),
+      y: randomRange(-8, -12)
+    });
+}
+Sequin.prototype.update = function () {
+  // apply forces to velocity
+  this.velocity.x -= this.velocity.x * dragSequins;
+  this.velocity.y = this.velocity.y + gravitySequins;
+
+  // set position
+  this.position.x += this.velocity.x;
+  this.position.y += this.velocity.y;
+};
+
+// add elements to arrays to be drawn
+initBurst = () => {
+  for (let i = 0; i < confettiCount; i++) {
+    confetti.push(new Confetto());
+  }
+  for (let i = 0; i < sequinCount; i++) {
+    sequins.push(new Sequin());
+  }
+};
+
+// draws the elements on the canvas
+render = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  confetti.forEach((confetto, index) => {
+    let width = confetto.dimensions.x * confetto.scale.x;
+    let height = confetto.dimensions.y * confetto.scale.y;
+
+    // move canvas to position and rotate
+    ctx.translate(confetto.position.x, confetto.position.y);
+    ctx.rotate(confetto.rotation);
+
+    // update confetto "physics" values
+    confetto.update();
+
+    // get front or back fill color
+    ctx.fillStyle =
+      confetto.scale.y > 0 ? confetto.color.front : confetto.color.back;
+
+    // draw confetto
+    ctx.fillRect(-width / 2, -height / 2, width, height);
+
+    // reset transform matrix
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    // clear rectangle where button cuts off
+    if (confetto.velocity.y < 0) {
+      ctx.clearRect(
+        canvas.width / 2 - button.offsetWidth / 2,
+        canvas.height / 2 + button.offsetHeight / 2,
+        button.offsetWidth,
+        button.offsetHeight
+      );
+    }
+  });
+
+  sequins.forEach((sequin, index) => {
+    // move canvas to position
+    ctx.translate(sequin.position.x, sequin.position.y);
+
+    // update sequin "physics" values
+    sequin.update();
+
+    // set the color
+    ctx.fillStyle = sequin.color;
+
+    // draw sequin
+    ctx.beginPath();
+    ctx.arc(0, 0, sequin.radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // reset transform matrix
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    // clear rectangle where button cuts off
+    if (sequin.velocity.y < 0) {
+      ctx.clearRect(
+        canvas.width / 2 - button.offsetWidth / 2,
+        canvas.height / 2 + button.offsetHeight / 2,
+        button.offsetWidth,
+        button.offsetHeight
+      );
+    }
+  });
+
+  // remove confetti and sequins that fall off the screen
+  // must be done in seperate loops to avoid noticeable flickering
+  confetti.forEach((confetto, index) => {
+    if (confetto.position.y >= canvas.height) confetti.splice(index, 1);
+  });
+  sequins.forEach((sequin, index) => {
+    if (sequin.position.y >= canvas.height) sequins.splice(index, 1);
+  });
+
+  window.requestAnimationFrame(render);
+};
+
+// cycle through button states when clicked
+clickButton = () => {
+  if (!disabled) {
+    disabled = true;
+    // Loading stage
+    button.classList.add("loading");
+    button.classList.remove("ready");
+    setTimeout(() => {
+      // Completed stage
+      button.classList.add("complete");
+      button.classList.remove("loading");
+      setTimeout(() => {
+        window.initBurst();
+        setTimeout(() => {
+          // Reset button so user can select it again
+          disabled = false;
+          button.classList.add("ready");
+          button.classList.remove("complete");
+        }, 4000);
+      }, 320);
+    }, 1800);
+  }
+};
+
+// re-init canvas if the window size changes
+resizeCanvas = () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  cx = ctx.canvas.width / 2;
+  cy = ctx.canvas.height / 2;
+};
+
+// resize listenter
+window.addEventListener("resize", () => {
+  resizeCanvas();
+});
+
+// click button on spacebar or return keypress
+document.body.onkeyup = (e) => {
+  if (e.keyCode == 13 || e.keyCode == 32) {
+    clickButton();
+  }
+};
+
+// Set up button text transition timings on page load
+textElements = button.querySelectorAll(".button-text");
+textElements.forEach((element) => {
+  characters = element.innerText.split("");
+  let characterHTML = "";
+  characters.forEach((letter, index) => {
+    characterHTML += `<span class="char${index}" style="--d:${
+      index * 30
+    }ms; --dr:${(characters.length - index - 1) * 30}ms;">${letter}</span>`;
+  });
+  element.innerHTML = characterHTML;
+});
+
+// kick off the render loop
+render();
+</script>
+
+</html>
